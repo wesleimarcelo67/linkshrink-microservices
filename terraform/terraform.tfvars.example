@@ -4,7 +4,7 @@
 #
 # DO NOT COMMIT THE 'terraform.tfvars' FILE TO GIT.
 
-aws_region = "eu-north-1"
+aws_region = "us-east-2"
 
 db_password = "<YOUR_STRONG_PASSWORD_FOR_USER_DB>"
 
