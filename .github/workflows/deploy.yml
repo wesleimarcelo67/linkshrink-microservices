@@ -15,9 +15,6 @@ permissions:
       id-token: write   
       contents: read     
 
-env:
-  AWS_REGION: us-east-2
-
 
 jobs:
   create_ecr_repos:
@@ -32,7 +29,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.GHA_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-2
       - name: Terraform Init
         run: terraform init
         working-directory: ./terraform
@@ -67,7 +64,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.GHA_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-2
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -104,7 +101,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.GHA_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: us-east-2
       - name: Terraform Init
         run: terraform init
         working-directory: ./terraform
