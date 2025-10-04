@@ -104,3 +104,11 @@ resource "aws_route_table_association" "private" {
 data "aws_route53_zone" "parent" {
   name = var.parent_zone_name
 }
+
+resource "aws_route53_record" "linkshrink" {
+  zone_id = data.aws_route53_zone.parent.zone_id
+  name    = var.domain_name
+  type    = "CNAME"
+  ttl     = 30
+  records = [aws_lb.main.dns_name]
+}
