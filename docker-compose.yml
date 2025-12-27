@@ -96,6 +96,7 @@ services:
       - user-service
       - link-service
       - redirect-service
+      - linkshrink-vue-gui
   
   # --- V2.0 User Interface (Vue.js Development Server) ---
   linkshrink-vue-gui:
@@ -109,8 +110,8 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
-    depends_on:
-      - gateway
+    expose:
+      - "80"
 
 volumes:
   user_db_data:
