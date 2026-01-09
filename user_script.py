@@ -1,36 +1,41 @@
 import requests
 
-# criação de usuário
-payload = {
-    'email': 'teste9@teste.com',
-    'password': 'teste'
-    }
+def http_requests():
+    
+    # criação de usuário
+    payload = {
+        'email': f'user{i}@teste.com',
+        'password': 'teste'
+        }
 
-response = requests.post("http://localhost:8080/users", json=payload)
+    response = requests.post("http://localhost:8080/users", json=payload)
 
-if response.status_code == 201: #caso a criação de usuário seja bem-sucedida, será efetuado o login
-    data = {
-        'username': '',
-        'password': ''
-    }
-    data['username'] = payload['email']
-    data['password'] = payload['password']
-    #comando de login
-    response = requests.post("http://localhost:8080/token", data)
+    if response.status_code == 201: #caso a criação de usuário seja bem-sucedida, será efetuado o login
+        data = {
+            'username': '',
+            'password': ''
+        }
+        data['username'] = payload['email']
+        data['password'] = payload['password']
+        #comando de login
+        response = requests.post("http://localhost:8080/token", data)
 
-    #obtenção de token de autenticação
-    token_data = response.json()
-    token = token_data.get('access_token')
-    token_type = token_data.get('token_type')
+        #obtenção de token de autenticação
+        token_data = response.json()
+        token = token_data.get('access_token')
+        token_type = token_data.get('token_type')
 
-    #dicionário para cabeçalho da requisição    
-    headers = {
-        'Authorization': f'{token_type.capitalize()} {token}'
-    }
-    link = {
-        'original_url': 'https://www.linkedin.com/in/weslei-santos-826b70167/'
-    }
+        #dicionário para cabeçalho da requisição    
+        headers = {
+            'Authorization': f'{token_type.capitalize()} {token}'
+        }
+        link = {
+            'original_url': 'https://www.linkedin.com/in/weslei-santos-826b70167/'
+        }
 
-    #criação do link
-    response = requests.post("http://localhost:8080/links", json=link, headers=headers)
-    print(response.status_code)
+        #criação do link
+        response = requests.post("http://localhost:8080/links", json=link, headers=headers)
+        print(response.status_code)
+
+for i in range(10):
+    http_requests()
