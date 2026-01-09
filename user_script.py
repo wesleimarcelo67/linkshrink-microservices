@@ -1,10 +1,11 @@
 import requests
 import argparse
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--host", type=str)
-
-host = parser.parse_args()
+# argumento para o host
+hostParser = argparse.ArgumentParser()
+hostParser.add_argument("--host", type=str)
+hostParser.add_argument("--requisitions", type=int)
+host = hostParser.parse_args()
 
 def http_requests():
     
@@ -43,5 +44,5 @@ def http_requests():
         response = requests.post(f"http://{host.host}:8080/links", json=link, headers=headers)
         print(response.status_code)
 
-for i in range(10):
+for i in range(host.requisitions):
     http_requests()
