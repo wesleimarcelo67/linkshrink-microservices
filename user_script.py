@@ -11,7 +11,7 @@ def http_requests():
     
     # criação de usuário
     payload = {
-        'email': f'usuario{i}@teste.com',
+        'email': f'user{i}@teste.com',
         'password': 'teste'
         }
 
