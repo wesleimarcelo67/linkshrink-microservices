@@ -1,5 +1,7 @@
 import requests
 
+host = "localhost"
+
 def http_requests():
     
     # criação de usuário
@@ -8,7 +10,7 @@ def http_requests():
         'password': 'teste'
         }
 
-    response = requests.post("http://localhost:8080/users", json=payload)
+    response = requests.post(f"http://{host}:8080/users", json=payload)
 
     if response.status_code == 201: #caso a criação de usuário seja bem-sucedida, será efetuado o login
         data = {
@@ -18,7 +20,7 @@ def http_requests():
         data['username'] = payload['email']
         data['password'] = payload['password']
         #comando de login
-        response = requests.post("http://localhost:8080/token", data)
+        response = requests.post(f"http://{host}:8080/token", data)
 
         #obtenção de token de autenticação
         token_data = response.json()
@@ -34,7 +36,7 @@ def http_requests():
         }
 
         #criação do link
-        response = requests.post("http://localhost:8080/links", json=link, headers=headers)
+        response = requests.post(f"http://{host}:8080/links", json=link, headers=headers)
         print(response.status_code)
 
 for i in range(10):
