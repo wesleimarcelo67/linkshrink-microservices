@@ -4,7 +4,7 @@ import argparse
 # argumento para o host
 hostParser = argparse.ArgumentParser()
 hostParser.add_argument("--host", type=str)
-hostParser.add_argument("--requisitions", type=int)
+hostParser.add_argument("--users", type=int)
 host = hostParser.parse_args()
 
 def http_requests():
@@ -44,5 +44,5 @@ def http_requests():
         response = requests.post(f"http://{host.host}:8080/links", json=link, headers=headers)
         print(response.status_code)
 
-for i in range(host.requisitions):
+for i in range(host.users):
     http_requests()
