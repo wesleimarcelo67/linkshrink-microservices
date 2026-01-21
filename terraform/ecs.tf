@@ -22,8 +22,8 @@ resource "aws_ecs_task_definition" "linkshrink_vue_gui" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
-    name      = "linkshrink-vue-gui"
-    image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/linkshrink-vue-gui:${var.image_tag}"
+    name         = "linkshrink-vue-gui"
+    image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/linkshrink-vue-gui:${var.image_tag}"
     portMappings = [{ containerPort = 80 }]
     logConfiguration = {
       logDriver = "awslogs"
@@ -55,7 +55,7 @@ resource "aws_ecs_service" "linkshrink_vue_gui" {
   task_definition = aws_ecs_task_definition.linkshrink_vue_gui.arn
   desired_count   = 1
   launch_type     = "FARGATE"
-  
+
   network_configuration {
     subnets         = aws_subnet.private[*].id
     security_groups = [aws_security_group.ecs_service_sg.id]
@@ -198,8 +198,8 @@ resource "aws_ecs_task_definition" "user_service" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
-    name  = "user-service"
-    image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/user-service:${var.image_tag}"
+    name         = "user-service"
+    image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/user-service:${var.image_tag}"
     portMappings = [{ containerPort = 8000 }]
     environment = [
       { name = "DATABASE_URL", value = "postgresql://${aws_db_instance.user_db.username}:${var.db_password}@${aws_db_instance.user_db.address}:${aws_db_instance.user_db.port}/${aws_db_instance.user_db.db_name}?sslmode=require" },
@@ -207,7 +207,7 @@ resource "aws_ecs_task_definition" "user_service" {
     ]
     logConfiguration = {
       logDriver = "awslogs"
-      options = { "awslogs-group" = aws_cloudwatch_log_group.user_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
+      options   = { "awslogs-group" = aws_cloudwatch_log_group.user_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
     }
   }])
 }
@@ -238,8 +238,8 @@ resource "aws_ecs_task_definition" "link_service" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
-    name  = "link-service"
-    image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/link-service:${var.image_tag}"
+    name         = "link-service"
+    image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/link-service:${var.image_tag}"
     portMappings = [{ containerPort = 8000 }]
     environment = [
       { name = "DATABASE_URL", value = "postgresql://${aws_db_instance.link_db.username}:${var.link_db_password}@${aws_db_instance.link_db.address}:${aws_db_instance.link_db.port}/${aws_db_instance.link_db.db_name}?sslmode=require" },
@@ -248,7 +248,7 @@ resource "aws_ecs_task_definition" "link_service" {
     ]
     logConfiguration = {
       logDriver = "awslogs"
-      options = { "awslogs-group" = aws_cloudwatch_log_group.link_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
+      options   = { "awslogs-group" = aws_cloudwatch_log_group.link_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
     }
   }])
 }
@@ -279,8 +279,8 @@ resource "aws_ecs_task_definition" "redirect_service" {
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = jsonencode([{
-    name  = "redirect-service"
-    image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/redirect-service:${var.image_tag}"
+    name         = "redirect-service"
+    image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/redirect-service:${var.image_tag}"
     portMappings = [{ containerPort = 8000 }]
     environment = [
       { name = "REDIS_HOST", value = aws_elasticache_cluster.redis.cache_nodes[0].address },
@@ -291,7 +291,7 @@ resource "aws_ecs_task_definition" "redirect_service" {
     ]
     logConfiguration = {
       logDriver = "awslogs"
-      options = { "awslogs-group" = aws_cloudwatch_log_group.redirect_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
+      options   = { "awslogs-group" = aws_cloudwatch_log_group.redirect_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
     }
   }])
 }
@@ -331,7 +331,7 @@ resource "aws_ecs_task_definition" "analytics_service" {
     ]
     logConfiguration = {
       logDriver = "awslogs"
-      options = { "awslogs-group" = aws_cloudwatch_log_group.analytics_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
+      options   = { "awslogs-group" = aws_cloudwatch_log_group.analytics_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
     }
   }])
 }

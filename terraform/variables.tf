@@ -8,7 +8,7 @@ variable "db_password" {
 variable "image_tag" {
   description = "The tag of the Docker image to deploy"
   type        = string
-  default     = "latest" # We'll override this in our CI/CD pipeline
+  # default     = "latest" # We'll override this in our CI/CD pipeline
 }
 
 variable "aws_region" {
@@ -39,7 +39,7 @@ variable "domain_name" {
   description = "The custom domain name for the application (e.g., linkshrink.aws.c3mcal.com)."
   type        = string
 }
- 
+
 variable "acm_certificate_arn" {
   description = "The ARN of the issued ACM certificate for the domain."
   type        = string
