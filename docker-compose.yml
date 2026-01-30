@@ -27,6 +27,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    mem_limit: 1024m
+    cpus: '2'
     # --------------------------
   
   link-db:
@@ -42,6 +44,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    mem_limit: 1024m
+    cpus: '2'
     # --------------------------
 
   # --- Application Services ---
@@ -55,6 +59,8 @@ services:
     depends_on:
       user-db:
         condition: service_healthy
+    mem_limit: 512m
+    cpus: '0.5'
     # ------------------------------
 
   link-service:
@@ -68,6 +74,8 @@ services:
     depends_on:
       link-db:
         condition: service_healthy
+    mem_limit: 512m
+    cpus: '0.5'
     # ------------------------------
   
   redirect-service:
@@ -78,12 +86,35 @@ services:
       # Provide this for internal calls during local dev
       - LINK_SERVICE_URL=http://link-service:8000
     depends_on: [redis, rabbitmq, link-service]
+    mem_limit: 512m
+    cpus: '0.5'
 
   analytics-service:
     build: ./analytics-service
     environment:
       - RABBITMQ_HOST=rabbitmq
     depends_on: [rabbitmq]
+    mem_limit: 512m
+    cpus: '0.5'
+
+  reverse-proxy:
+    image: nginx:1.21-alpine
+    volumes:
+      - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8000:80"
+    healthcheck:
+      test: ["CMD-SHELL",
+          "curl -f http://127.0.0.1/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    mem_limit: 512m
+    cpus: '0.5'
+    depends_on:
+      user-service: 
+        condition: service_started
 
   # --- API Gateway ---
   gateway:
@@ -93,10 +124,25 @@ services:
     ports:
       - "8080:80" 
     depends_on:
-      - user-service
-      - link-service
-      - redirect-service
-      - linkshrink-vue-gui
+      reverse-proxy:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+      link-service:
+        condition: service_started
+      redirect-service:
+        condition: service_started
+      linkshrink-vue-gui:
+        condition: service_started
+    mem_limit: 512m
+    cpus: '0.5'
+    command: >
+      sh -c "
+      echo 'Aguardando serviços...';
+      sleep 10;
+      nginx -t;
+      nginx -g 'daemon off;'
+      "
   
   # --- V2.0 User Interface (Vue.js Development Server) ---
   linkshrink-vue-gui:
@@ -112,6 +158,8 @@ services:
       - CHOKIDAR_USEPOLLING=true
     expose:
       - "80"
+    mem_limit: 512m
+    cpus: '0.5'
 
 volumes:
   user_db_data:
