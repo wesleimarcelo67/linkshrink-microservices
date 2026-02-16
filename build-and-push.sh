@@ -27,7 +27,7 @@ echo ""
 
 # --- 3. BUILD AND PUSH SERVICES ---
 # The service names must match the directory names exactly
-SERVICES=("user-service" "link-service" "redirect-service" "analytics-service" "web-gui")
+SERVICES=("user-service" "link-service" "redirect-service" "analytics-service" "linkshrink-vue-gui")
 
 for SERVICE in "${SERVICES[@]}"
 do
