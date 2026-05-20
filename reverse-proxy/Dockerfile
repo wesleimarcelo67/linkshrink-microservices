@@ -41,7 +41,12 @@ RUN git clone https://github.com/corazawaf/coraza-nginx.git && \
     mv coraza-nginx /usr/src
 
 RUN cd nginx-1.30.0 && \
-    ./configure --add-module=/usr/src/coraza-nginx
+    CONFARGS=$(nginx -V 2>&1 | sed -n -e 's/^.*arguments: //p'); \
+    ./configure --with-compat "$CONFARGS" --add-dynamic-module=/usr/src/coraza-nginx; \
+    make modules; \
+    mkdir -p /usr/lib/nginx/modules; \
+    find objs/*.so -print; \
+    cp objs/ngx_*.so /usr/lib/nginx/modules
 # COPY ./nginx-basic.conf /etc/nginx/nginx.conf
 
 # EXPOSE 80
