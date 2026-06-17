@@ -62,7 +62,8 @@ RUN cd nginx-1.31.1 && \
 FROM nginx:1.31.1-trixie
 
 COPY --from=nginx-coraza /usr/src/coraza-nginx/t /tmp/t
-COPY --from=nginx-coraza /usr/src/coraza-nginx/coraza.conf /etc/nginx/conf.d/coraza.conf
+#COPY --from=nginx-coraza /usr/src/coraza-nginx/coraza.conf /etc/nginx/conf.d/coraza.conf
+COPY ./coraza-test.conf /etc/nginx/conf.d/coraza.conf
 COPY --from=nginx-coraza /usr/lib/nginx/modules/ /usr/lib/nginx/modules/
 COPY --from=libcoraza-builder /go/libcoraza/libcoraza.so /usr/local/lib
 
@@ -78,6 +79,12 @@ RUN apt-get update -qq && \
     export TEST_NGINX_GLOBALS="load_module \"/usr/lib/nginx/modules/ngx_http_coraza_module.so\"; user root;" && \
     prove -v coraza*.t 2>&1 || true
 
-# EXPOSE 80
+RUN mkdir -p /var/log/nginx /var/log/coraza && \
+    touch /var/log/coraza_debug.log /var/log/coraza_audit.log && \
+    chown -R nginx:nginx /var/log/coraza /var/log/coraza_debug.log /var/log/coraza_audit.log && \
+    chmod 755 /var/log/coraza && \
+    chmod 644 /var/log/coraza_debug.log /var/log/coraza_audit.log
 
-# CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
