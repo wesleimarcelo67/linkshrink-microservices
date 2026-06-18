@@ -85,6 +85,10 @@ RUN mkdir -p /var/log/nginx /var/log/coraza && \
     chmod 755 /var/log/coraza && \
     chmod 644 /var/log/coraza_debug.log /var/log/coraza_audit.log
 
+RUN mkdir -p /var/log/nginx /var/log/coraza && \
+    touch /var/log/coraza_audit.log /var/log/coraza_debug.log && \
+    chown -R nginx:nginx /var/log/coraza /var/log/coraza_audit.log /var/log/coraza_debug.log
+
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
