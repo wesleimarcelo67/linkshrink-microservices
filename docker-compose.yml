@@ -101,8 +101,12 @@ services:
     build:
       context: ./reverse-proxy
       dockerfile: Dockerfile
+      args:
+        - ENV_NAME=dev
     ports:
       - "8000:80"
+    environment:
+      - ENV_NAME=dev
     healthcheck:
       test: ["CMD-SHELL",
           "curl -f http://127.0.0.1/health || exit 1"]

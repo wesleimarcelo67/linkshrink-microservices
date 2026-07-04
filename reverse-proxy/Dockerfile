@@ -60,6 +60,8 @@ RUN cd nginx-1.31.1 && \
     cp objs/ngx_*.so /usr/lib/nginx/modules
 
 FROM nginx:1.31.1-trixie
+ARG ENV_NAME
+ENV ENV_NAME=$ENV_NAME
 
 COPY --from=nginx-coraza /usr/src/coraza-nginx/t /tmp/t
 #COPY --from=nginx-coraza /usr/src/coraza-nginx/coraza.conf /etc/nginx/conf.d/coraza.conf
@@ -67,7 +69,7 @@ COPY ./coraza.conf /etc/nginx/conf.d/coraza.conf
 COPY --from=nginx-coraza /usr/lib/nginx/modules/ /usr/lib/nginx/modules/
 COPY --from=libcoraza-builder /go/libcoraza/libcoraza.so /usr/local/lib
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx-${ENV_NAME}.conf /etc/nginx/nginx.conf
 
 RUN apt-get update -qq && \
     apt-get install -qq --no-install-recommends perl git && \
