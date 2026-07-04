@@ -148,7 +148,7 @@ resource "aws_lb_listener_rule" "redirect_service" {
 # --- Target Groups: Pools of our backend services ---
 resource "aws_lb_target_group" "user_service" {
   name        = "user-service-tg"
-  port        = 8000
+  port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_vpc.main.id
   target_type = "ip"
