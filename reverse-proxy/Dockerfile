@@ -63,11 +63,11 @@ FROM nginx:1.31.1-trixie
 
 COPY --from=nginx-coraza /usr/src/coraza-nginx/t /tmp/t
 #COPY --from=nginx-coraza /usr/src/coraza-nginx/coraza.conf /etc/nginx/conf.d/coraza.conf
-COPY ./coraza-test.conf /etc/nginx/conf.d/coraza.conf
+COPY ./coraza.conf /etc/nginx/conf.d/coraza.conf
 COPY --from=nginx-coraza /usr/lib/nginx/modules/ /usr/lib/nginx/modules/
 COPY --from=libcoraza-builder /go/libcoraza/libcoraza.so /usr/local/lib
 
-COPY ./nginx-basic.conf /etc/nginx/nginx.conf
+COPY ./nginx.conf /etc/nginx/nginx.conf
 
 RUN apt-get update -qq && \
     apt-get install -qq --no-install-recommends perl git && \
@@ -85,9 +85,6 @@ RUN mkdir -p /var/log/nginx /var/log/coraza && \
     chmod 755 /var/log/coraza && \
     chmod 644 /var/log/coraza_debug.log /var/log/coraza_audit.log
 
-RUN mkdir -p /var/log/nginx /var/log/coraza && \
-    touch /var/log/coraza_audit.log /var/log/coraza_debug.log && \
-    chown -R nginx:nginx /var/log/coraza /var/log/coraza_audit.log /var/log/coraza_debug.log
 
 EXPOSE 80
 
