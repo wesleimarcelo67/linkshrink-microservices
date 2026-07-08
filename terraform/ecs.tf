@@ -197,19 +197,18 @@ resource "aws_ecs_task_definition" "user_service" {
   cpu                      = 256
   memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  container_definitions = jsonencode([{
-    name         = "user-service"
-    image        = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/user-service:${var.image_tag}"
-    portMappings = [{ containerPort = 8000 }]
-    environment = [
-      { name = "DATABASE_URL", value = "postgresql://${aws_db_instance.user_db.username}:${var.db_password}@${aws_db_instance.user_db.address}:${aws_db_instance.user_db.port}/${aws_db_instance.user_db.db_name}?sslmode=require" },
-      { name = "JWT_SECRET_KEY", value = var.jwt_secret_key }
-    ]
-    logConfiguration = {
-      logDriver = "awslogs"
-      options   = { "awslogs-group" = aws_cloudwatch_log_group.user_service_logs.name, "awslogs-region" = var.aws_region, "awslogs-stream-prefix" = "ecs" }
-    }
-  }])
+  container_definitions = templatefile("${path.module}/containerDefinitions/containerDefinitions.tftpl", {
+    account_id           = data.aws_caller_identity.current.account_id
+    aws_region           = var.aws_region
+    cloudwatch_log_group = aws_cloudwatch_log_group.user_service_logs.name
+    db_username          = aws_db_instance.user_db.username
+    db_password          = var.db_password
+    db_address           = aws_db_instance.user_db.address
+    db_port              = aws_db_instance.user_db.port
+    db_name              = aws_db_instance.user_db.db_name
+    image_tag            = var.image_tag
+    jwt_secret_key       = var.jwt_secret_key
+  })
 }
 resource "aws_ecs_service" "user_service" {
   name                              = "user-service"

@@ -27,7 +27,7 @@ resource "aws_mq_broker" "rabbitmq" {
   broker_name                = "linkshrink-rabbitmq"
   engine_type                = "RabbitMQ"
   engine_version             = "3.13"
-  host_instance_type         = "mq.t3.micro"
+  host_instance_type         = "mq.m7g.medium"
   deployment_mode            = "SINGLE_INSTANCE"
   publicly_accessible        = false
   subnet_ids                 = [aws_subnet.private[0].id]
