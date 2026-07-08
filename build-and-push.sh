@@ -27,14 +27,14 @@ echo ""
 
 # --- 3. BUILD AND PUSH SERVICES ---
 # The service names must match the directory names exactly
-SERVICES=("user-service" "link-service" "redirect-service" "analytics-service" "linkshrink-vue-gui")
+SERVICES=("user-service" "link-service" "redirect-service" "analytics-service" "linkshrink-vue-gui" "reverse-proxy")
 
 for SERVICE in "${SERVICES[@]}"
 do
   echo "--- Building and Pushing $SERVICE ---"
   
   # The last argument ("$SERVICE") tells Docker to use that directory as the build context.
-  docker build -t "$SERVICE:$LATEST_TAG" -f "$SERVICE/Dockerfile" "$SERVICE"
+  docker build --build-arg ENV_NAME=prod -t "$SERVICE:$LATEST_TAG" -f "$SERVICE/Dockerfile" "$SERVICE" 
   
   # Tag and Push
   docker tag "$SERVICE:$LATEST_TAG" "$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$SERVICE:$LATEST_TAG"
