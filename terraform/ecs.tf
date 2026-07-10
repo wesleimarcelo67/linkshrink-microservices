@@ -223,8 +223,8 @@ resource "aws_ecs_service" "user_service" {
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.user_service.arn
-    container_name   = "user-service"
-    container_port   = 8000
+    container_name   = "reverse-proxy"
+    container_port   = 80
   }
   depends_on = [aws_lb_listener_rule.user_service]
 }
