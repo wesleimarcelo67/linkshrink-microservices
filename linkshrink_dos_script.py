@@ -25,7 +25,6 @@ def http_requests(i):
       'Accept-Encoding': 'gzip, deflate, br, zstd',
       'Accept-Language': 'en-US,en;q=0.9,pt;q=0.8',
       'Connection': 'keep-alive',
-      'Content-Length': '47',
       'Content-Type': 'application/json',
       'DNT': '1',
       'Host': f'{host.host}',
