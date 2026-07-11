@@ -82,7 +82,8 @@ RUN apt-get update -qq && \
     prove -v coraza*.t 2>&1 || true
 
 RUN mkdir -p /var/log/nginx /var/log/coraza && \
-    touch /var/log/coraza_debug.log /var/log/coraza_audit.log && \
+    ln -sf /dev/stdout /var/log/coraza_audit.log && \
+    ln -sf /dev/stderr /var/log/coraza_debug.log && \
     chown -R nginx:nginx /var/log/coraza /var/log/coraza_debug.log /var/log/coraza_audit.log && \
     chmod 755 /var/log/coraza && \
     chmod 644 /var/log/coraza_debug.log /var/log/coraza_audit.log
