@@ -194,8 +194,8 @@ resource "aws_ecs_task_definition" "user_service" {
   family                   = "user-service-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = 2048
-  memory                   = 4096
+  cpu                      = 256
+  memory                   = 512
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
   container_definitions = templatefile("${path.module}/containerDefinitions/containerDefinitions.tftpl", {
     account_id           = data.aws_caller_identity.current.account_id
